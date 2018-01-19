@@ -15,7 +15,7 @@ create_tweet_df_from_json <- function(jsonfile){
   clean_date <- function(twitterdate){
     format.str <- "%b %d %H:%M:%S %z %Y"
     twitterdate <- substring(twitterdate, 5)
-    date_clean <- as.POSIXct(strptime(twitterdate, format.str, tz = "UTC"), tz = "UTC")
+    date_clean <- as.POSIXct(strptime(twitterdate, format.str, tz = "EST"), tz = "EST")
     return(date_clean)
   }
   
