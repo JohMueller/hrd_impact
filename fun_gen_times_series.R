@@ -7,10 +7,9 @@
 # min_date <- first day of the times series in the format "YYYY-MM-DD"
 # max_date <- last day of the times series in the format "YYYY-MM-DD"
 
-library(dplyr)
+# returns: Timesseries df with total_tweets, total_faves, total_retweets per day, total engagement
 
-tweets_amnesty <- create_tweet_df_from_json("amnesty-tweets.json")
-tweets_wwf <- create_tweet_df_from_json("wwf-tweets.json")
+library(dplyr)
 
 create_timesseries_df_from_tweet_df <- function(tweets_df,
                                                 include_retweets = TRUE,
@@ -47,6 +46,7 @@ create_timesseries_df_from_tweet_df <- function(tweets_df,
       ts_df$total_retweets[i] <- aggregated_df$total_retweets[aggregated_df$date == ts_df$date[i]]
     }
   }
+  ts_df$total_engagement <- ts_df$total_faves + ts_df$total_retweets
   
   #return times series df
   return(ts_df)
