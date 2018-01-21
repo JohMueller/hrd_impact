@@ -46,3 +46,9 @@ setup_data_for_modelling <- function(user_of_interest = "amnesty",
 
 model_df <- setup_data_for_modelling()
 
+pre.period <- c(1, 61)
+post.period <- c(62, 92)
+impact <- CausalImpact(model_df, pre.period, post.period)
+
+plot(impact)
+summary(impact)
