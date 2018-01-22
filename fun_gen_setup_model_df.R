@@ -1,10 +1,12 @@
 # function to prepare the dataset for the causal impact analysis 
 
 
-setup_data_for_modelling <- function(user_of_interest = "amnesty",
-                                     list_of_predictor_accounts = c("WWF", "Greenpeace"),
-                                     date_of_awarness_day = "2017-12-10",
-                                     nr_days_pre_awareness_day = 61,
+setup_data_for_modelling <- function(user_of_interest = "BCAction",
+                                     list_of_predictor_accounts = c("WWF",
+                                                                    "Greenpeace",
+                                                                    "amnesty"),
+                                     date_of_awarness_day = "2017-10-01",
+                                     nr_days_pre_awareness_day = 91,
                                      nr_days_post_awareness_day = 30,
                                      include_retweets = TRUE){
   ## tweets to df
@@ -17,26 +19,29 @@ setup_data_for_modelling <- function(user_of_interest = "amnesty",
                                 })
   
   ## tweets_df to timesseries_df
-  min_date = as.Date(date_of_awarness_day) - nr_days_pre_awareness_day
-  max_date = as.Date(date_of_awarness_day) + nr_days_post_awareness_day
+  start_date = as.Date(date_of_awarness_day) - nr_days_pre_awareness_day
+  end_date = as.Date(date_of_awarness_day) + nr_days_post_awareness_day
+  
+  print(start_date)
+  print(end_date)
   
   ts_outcome <-  create_timesseries_df_from_tweet_df(tweets_outcome,
                                                   include_retweets = include_retweets,
-                                                  min_date = min_date,
-                                                  max_date = max_date)
+                                                  min_date = start_date,
+                                                  max_date = end_date)
   
   
   ts_predictors <- lapply(tweets_predictors,
                               function(x){
                                 create_timesseries_df_from_tweet_df(x,
                                                                     include_retweets = include_retweets,
-                                                                    min_date = min_date,
-                                                                    max_date = max_date)})
+                                                                    min_date = start_date,
+                                                                    max_date = end_date)})
   
   
   model_df <- as.data.frame(cbind(
-    tweets$ts_outcome$total_engagement,
-    sapply(tweets$ts_predictors, function(x){as.data.frame(x)$total_engagement})
+    ts_outcome$total_engagement,
+    sapply(ts_predictors, function(x){as.data.frame(x)$total_engagement})
   ))  
   
   return(model_df)
