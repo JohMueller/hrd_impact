@@ -32,7 +32,7 @@ create_timesseries_df_from_tweet_df <- function(tweets_df,
   #return(as.Date("2017-11-22") %in% as.Date(aggregated_df$date))
   # Init empty dataframe
   
-  ts_df <- data.frame(date = as.Date(as.Date(min_date):as.Date(max_date)))
+  ts_df <- data.frame(date = as.Date(as.Date(min_date):as.Date(max_date), origin="1970-01-01"))
   ts_df$total_tweets <- rep(0, nrow(ts_df))
   ts_df$total_faves <- rep(0, nrow(ts_df))
   ts_df$total_retweets <- rep(0, nrow(ts_df))

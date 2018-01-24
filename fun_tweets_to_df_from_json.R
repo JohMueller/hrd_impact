@@ -6,7 +6,7 @@ Sys.setlocale("LC_TIME", "English") # Otherwise cleaning the date will fail
 
 create_tweet_df_from_json <- function(jsonfile){
   
-  json <- lapply(readLines(jsonfile), fromJSON, flatten = TRUE)
+  json <- lapply(readLines(jsonfile), fromJSON)
   
   # Init Dataframe
   df <- data.frame(id_tweet = unlist(lapply(json, "[[",  j = 3)))
@@ -16,6 +16,7 @@ create_tweet_df_from_json <- function(jsonfile){
     format.str <- "%b %d %H:%M:%S %z %Y"
     twitterdate <- substring(twitterdate, 5)
     date_clean <- as.POSIXct(strptime(twitterdate, format.str, tz = "EST"), tz = "EST")
+    date_clean <- as.Date(date_clean)
     return(date_clean)
   }
   
