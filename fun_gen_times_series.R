@@ -47,7 +47,8 @@ create_timesseries_df_from_tweet_df <- function(tweets_df,
     }
   }
   ts_df$total_engagement <- ts_df$total_faves + ts_df$total_retweets
-  
+  ts_df$total_engagement_per_tweet <- (ts_df$total_faves + ts_df$total_retweets)/ts_df$total_tweets
+  ts_df$total_engagement_per_tweet[is.na(ts_df$total_engagement_per_tweet)] <- 0
   #return times series df
   return(ts_df)
 }

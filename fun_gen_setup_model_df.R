@@ -6,6 +6,7 @@ setup_data_for_modelling <- function(user_of_interest = "BCAction",
                                                                     "Greenpeace",
                                                                     "amnesty"),
                                      date_of_awarness_day = "2017-10-01",
+                                     use_metric = "total_enagement",
                                      nr_days_pre_awareness_day = 91,
                                      nr_days_post_awareness_day = 30,
                                      include_retweets = TRUE){
@@ -38,11 +39,20 @@ setup_data_for_modelling <- function(user_of_interest = "BCAction",
                                                                     min_date = start_date,
                                                                     max_date = end_date)})
   
+  print(use_metric)
+  if(use_metric == "total_engagement"){
+    model_df <- as.data.frame(cbind(
+      ts_outcome$total_engagement,
+      sapply(ts_predictors, function(x){as.data.frame(x)$total_engagement})
+    ))  
+  }
   
-  model_df <- as.data.frame(cbind(
-    ts_outcome$total_engagement,
-    sapply(ts_predictors, function(x){as.data.frame(x)$total_engagement})
-  ))  
+  if(use_metric == "total_engagement_per_tweet"){
+    model_df <- as.data.frame(cbind(
+      ts_outcome$total_engagement_per_tweet,
+      sapply(ts_predictors, function(x){as.data.frame(x)$total_engagement_per_tweet})
+    ))  
+  }
   
   return(model_df)
 }
